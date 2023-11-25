@@ -4,6 +4,21 @@
   var panelImages = [];
 
   /**
+   * Preloader
+   */
+  function showLoadingIndicator() {
+    // Display the preloader
+    const preloader = document.getElementById("preloader");
+    preloader.style.display = "flex";
+  }
+
+  function hideLoadingIndicator() {
+    // Hide the preloader
+    const preloader = document.getElementById("preloader");
+    preloader.style.display = "none";
+  }
+
+  /**
    * Slider animation
    */
   function initializeSliderButtons() {
@@ -150,7 +165,7 @@
 
       var textareaValue = document.getElementById("formControlTextarea1").value;
 
-      if(panelImages.length==10){
+      if (panelImages.length == 10) {
         alert("Limit for 10 images!!");
         return;
       }

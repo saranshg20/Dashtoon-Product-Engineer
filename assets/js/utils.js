@@ -159,21 +159,6 @@ window.addEventListener("load", () => {
 });
 
 /**
- * Preloader
- */
-function showLoadingIndicator() {
-  // Display the preloader
-  const preloader = document.getElementById("preloader");
-  preloader.style.display = "flex";
-}
-
-function hideLoadingIndicator() {
-  // Hide the preloader
-  const preloader = document.getElementById("preloader");
-  preloader.style.display = "none";
-}
-
-/**
  * Animation on scroll
  */
 window.addEventListener("load", () => {
