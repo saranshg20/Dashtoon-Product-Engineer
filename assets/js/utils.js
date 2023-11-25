@@ -169,3 +169,9 @@ window.addEventListener("load", () => {
     mirror: false,
   });
 });
+
+// Set the canvas width dynamically based on the window size
+// window.addEventListener("resize", () => {
+//     resizeCanvas();
+//     drawImages();
+// });
