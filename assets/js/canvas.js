@@ -2,6 +2,44 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 var images = [];
 
+function clearCanvas() {
+  images.length = 0;
+  activeImage = null;
+  drawImages();
+}
+
+function loadImages2(blobList) {
+  blobList.forEach((blob, index) => {
+    const img = new Image();
+    img.onload = () => {
+      const row = Math.floor(index/2);
+      const column = index%2;
+      const x = column * canvas.width/2;
+      const y = row * canvas.height/5;
+      const width = canvas.width/2;
+      const height = canvas.height/5;
+
+      images.push({
+        img,
+        x,
+        y,
+        width,
+        height,
+      });
+
+      drawImages2();
+    };
+    img.src = URL.createObjectURL(blob);
+  });
+}
+
+function drawImages2() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  images.forEach(({ img, x, y, width, height }) => {
+    ctx.drawImage(img, x, y, width, height);
+  });
+}
+
 function loadImages(blobList) {
   blobList.forEach((blob, index) => {
     const img = new Image();
@@ -10,8 +48,8 @@ function loadImages(blobList) {
         img,
         x: 50 * index,
         y: 50,
-        width: 100,
-        height: 75,
+        width: 200,
+        height: 150,
       });
       drawImages();
     };
@@ -44,17 +82,20 @@ function handleMouseEvents(event) {
 
       // Check if mouse is near any corner for resizing
       if (
-        mouseX >= x + width - 10 &&
+        mouseX >= x + width - 20 &&
         mouseX <= x + width &&
-        mouseY >= y + height - 10 &&
+        mouseY >= y + height - 20 &&
         mouseY <= y + height
       ) {
         isResizing = true;
       }
+
+      return;
     }
   });
 
   canvas.addEventListener("mousemove", (e) => {
+    console.log(activeImage);
     if (activeImage !== null) {
       const newMouseX = e.clientX - canvas.getBoundingClientRect().left;
       const newMouseY = e.clientY - canvas.getBoundingClientRect().top;
@@ -62,10 +103,11 @@ function handleMouseEvents(event) {
       if (isResizing) {
         images[activeImage].width = newMouseX - images[activeImage].x;
         images[activeImage].height = newMouseY - images[activeImage].y;
-      } else {
-        images[activeImage].x = newMouseX - images[activeImage].width / 2;
-        images[activeImage].y = newMouseY - images[activeImage].height / 2;
-      }
+      } 
+      // else {
+      //   images[activeImage].x = newMouseX;
+      //   images[activeImage].y = newMouseY;
+      // }
 
       drawImages();
     }

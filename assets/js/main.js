@@ -52,6 +52,7 @@ async function queryImage(data) {
 
   if (!response.ok) {
     console.error(`Error: ${response.status} - ${response.statusText}`);
+    alert("Please retry. Found error while making API call.");
     return null;
   }
 
@@ -74,7 +75,7 @@ function addButtonsToCarousel() {
 
   const prevText = document.createElement("span");
   prevText.className = "sr-only";
-  prevText.textContent = "Previous";
+  prevText.textContent = "Prev";
 
   prevControl.appendChild(prevIcon);
   prevControl.appendChild(prevText);
@@ -143,7 +144,6 @@ async function appendImageToGlobalVariable(text) {
   showLoadingIndicator();
 
   // Query image based on text
-  /**{@Type } */
   const imageBlob = await queryImage({ inputs: text });
   console.log(imageBlob);
   panelImages.push(imageBlob);
@@ -162,6 +162,10 @@ document
 
     var textareaValue = document.getElementById("formControlTextarea1").value;
 
+    if (textareaValue.trim() == "") {
+      return;
+    }
+
     if (panelImages.length == 10) {
       alert("Limit for 10 images!!");
       return;
@@ -179,8 +183,8 @@ document
   .getElementById("add-image-btn")
   .addEventListener("click", function (event) {
     event.preventDefault(); // Prevent the default behavior (navigation)
-
-    loadImages(panelImages);
+    clearCanvas();
+    loadImages2(panelImages);
   });
 
 /**
@@ -189,7 +193,20 @@ document
 document
   .getElementById("download-comic-btn")
   .addEventListener("click", function (event) {
-    const dataUrl = canvas.toDataURL("image/png");
+    // Get the canvas element
+    var canvas = document.getElementById("myCanvas");
+
+    // Create a new canvas with the desired width and height
+    var newCanvas = document.createElement("canvas");
+    newCanvas.width = 600; // Replace with your desired width
+    newCanvas.height = 900; // Replace with your desired height
+
+    // Copy the content of the original canvas to the new canvas
+    var context = newCanvas.getContext("2d");
+    context.drawImage(canvas, 0, 0, newCanvas.width, newCanvas.height);
+
+    // Convert the new canvas to a data URL
+    var dataUrl = newCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = dataUrl;
     link.download = "canvas_image.png";
@@ -197,4 +214,4 @@ document
   });
 
 hideLoadingIndicator();
-// resizeCanvas();
+resizeCanvas();

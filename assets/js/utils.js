@@ -2,7 +2,13 @@
  * Easy selector helper function
  */
 const select = (el, all = false) => {
+  if(el==null){
+    return;
+  }
   el = el.trim();
+  if(el==''){
+    return;
+  }
   if (all) {
     return [...document.querySelectorAll(el)];
   } else {

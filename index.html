@@ -10,8 +10,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/img/favicon-16x16.png" rel="icon">
+  <link href="assets/img/favicon-32x32.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -40,14 +40,13 @@
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
           <li><a class="nav-link scrollto active" href="#top">Home</a></li>
-          <li><a class="nav-link scrollto" href="#slider">Comic Images</a></li>
-          <li><a class="nav-link scrollto" href="#playground">Playground</a></li>
-          <li><a class="nav-link scrollto" href="#footer">Contact</a></li>
+          <li><a class="nav-link scrollto" href="#slider">Generated Images</a></li>
+          <li><a class="nav-link scrollto" href="#strip">Strip</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a id="download-comic-btn" class="btn scrollto">Download Comic</a>
+      <a href="#footer" class="btn scrollto" style="margin: 2px;">Contact</a>
 
     </div>
   </header><!-- End Header -->
@@ -77,16 +76,13 @@
     <section id="slider" class="slider">
       <div class="container" data-aos="fade-up">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          </ol>
           <div class="carousel-inner">
             <div class="carousel-item active">
               <img class="d-block w-100" src="assets/img/generated_images/image1.jpg" alt="First slide">
             </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+            <span class="sr-only">Prev</span>
           </a>
           <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -97,14 +93,16 @@
       </div>
     </section><!-- End Slider Section -->
 
-    <!-- ======= Playground Section ======= -->
-    <section id="playground" class="home d-flex align-items-center justify-content-center">
+    <!-- ======= Strip Section ======= -->
+    <section id="strip" class="home d-flex align-items-center justify-content-center">
       <div class="container" data-aos="fade-up">
-        <canvas id="myCanvas" width="1300" height="600"></canvas>
-        <a href="#playground" id="add-image-btn" class="btn scrollto">Add Generated Images</a>
+        <canvas id="myCanvas"></canvas>
+        <br>
+        <a href="#strip" id="add-image-btn" class="btn scrollto">Add Generated Images</a>
+        <a id="download-comic-btn" class="btn scrollto" style="margin: 2px;">Download Comic</a>
       </div>
     </section>
-    <!-- End Playground Section -->
+    <!-- End Strip Section -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -123,6 +121,9 @@
    <!-- jQuery -->
    <!-- Bootstrap JS and Popper.js -->
    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <!-- <script src="http://code.jquery.com/jquery.min.js"></script> -->
+  <!-- <script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script> -->
+  <!-- <script src="https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
