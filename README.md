@@ -12,4 +12,4 @@ Develop a simple web application that allows users to create and share a 10-pane
 2. With drag and resize feature in canvas, the speech bubbles and text annotations on the images could be added with ease.
 
 ## Sample Output:
-![Screenshot] (sample_image.png)
+![Alt text](sample_image.png)
