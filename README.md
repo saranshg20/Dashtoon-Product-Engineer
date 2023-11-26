@@ -3,14 +3,13 @@ Develop a simple web application that allows users to create and share a 10-pane
 
 ## Steps to generate strip:
 1. Enter context for the image in 'Home' section.
-2. 'Generated Image' section consist API results.
-3. The strip accomodate 10 panels in the order of image generated.
-4. Move to Strip section and click on 'Add Generated Images' button.
-5. To download the strip click on 'Download Comic' button.
+2. Generate 10 images. The strip accomodate 10 panels in the order of image generated.
+3. Move to Strip section and click on 'Add Generated Images' button.
+4. To download the strip click on 'Download Comic' button.
 
 ## Improvements:
-1. I tried to make the strip canvas section free for users to drag and resize the images as per convenience but due to limited time couldn't add. It had a lot of edge cases :smiling_face_with_tear:
+1. Drag and resize feature can be added in the canvas section. It would help user to arrange the images as per convenience.Due to limited time couldn't add this functionality. It has a lot of edge cases :smiling_face_with_tear:
 2. With drag and resize feature in canvas, the speech bubbles and text annotations on the images could be added with ease.
 
 ## Sample Output:
-![Sample Image](./sample_image.png)
+![Alt text](sample_image.png)

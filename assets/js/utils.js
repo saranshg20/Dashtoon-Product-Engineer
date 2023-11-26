@@ -2,11 +2,11 @@
  * Easy selector helper function
  */
 const select = (el, all = false) => {
-  if(el==null){
+  if (el == null) {
     return;
   }
   el = el.trim();
-  if(el==''){
+  if (el == "") {
     return;
   }
   if (all) {
@@ -176,8 +176,28 @@ window.addEventListener("load", () => {
   });
 });
 
-// Set the canvas width dynamically based on the window size
-// window.addEventListener("resize", () => {
-//     resizeCanvas();
-//     drawImages();
-// });
+/**
+ * Handle window resize
+ */
+// Event listener for the window resize event
+window.addEventListener("resize", () => {
+  resizeCanvas();
+});
+
+/**
+ * Show Preloader
+ */
+function showLoadingIndicator() {
+  // Display the preloader
+  const preloader = document.getElementById("preloader");
+  preloader.style.display = "flex";
+}
+
+/**
+ * Hide Preloader
+ */
+function hideLoadingIndicator() {
+  // Hide the preloader
+  const preloader = document.getElementById("preloader");
+  preloader.style.display = "none";
+}

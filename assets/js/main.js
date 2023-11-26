@@ -1,71 +1,81 @@
+/**
+ * Generated Panel Images List
+ */
 var panelImages = [];
 
 /**
- * Preloader
+ * Initialize Event Listeners
  */
-function showLoadingIndicator() {
-  // Display the preloader
-  const preloader = document.getElementById("preloader");
-  preloader.style.display = "flex";
-}
+function initEventListeners() {
+  /**
+   * Extract the data from the textarea
+   */
+  document
+    .getElementById("generate-image-btn")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
 
-function hideLoadingIndicator() {
-  // Hide the preloader
-  const preloader = document.getElementById("preloader");
-  preloader.style.display = "none";
+      var textareaValue = document.getElementById("formControlTextarea1").value;
+
+      if (textareaValue.trim() == "") {
+        return;
+      }
+
+      if (panelImages.length == 10) {
+        alert("Limit for 10 images!!");
+        return;
+      }
+
+      appendImage(textareaValue.toString());
+    });
+
+  /**
+   * Add images to canvas area
+   */
+  document
+    .getElementById("add-image-btn")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      clearCanvas();
+      loadImages2(panelImages);
+    });
+
+  /**
+   * Add images to canvas area
+   */
+  document
+    .getElementById("download-comic-btn")
+    .addEventListener("click", function (event) {
+      // Get the canvas element
+      var canvas = document.getElementById("myCanvas");
+
+      // Create a new canvas with the desired width and height
+      var newCanvas = document.createElement("canvas");
+      newCanvas.width = 600;
+      newCanvas.height = 900;
+
+      // Copy the content of the original canvas to the new canvas
+      var context = newCanvas.getContext("2d");
+      context.drawImage(canvas, 0, 0, newCanvas.width, newCanvas.height);
+
+      // Convert the new canvas to a data URL
+      var dataUrl = newCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "canvas_image.png";
+      link.click();
+    });
 }
 
 /**
- * Slider animation
+ * Initialize Buttons in Slider
  */
-function initializeSliderButtons() {
-  document
-    .querySelector(".carousel-control-next")
-    .addEventListener("click", function () {
-      $("#carouselExampleIndicators").carousel("next");
-    });
-
-  document
-    .querySelector(".carousel-control-prev")
-    .addEventListener("click", function () {
-      $("#carouselExampleIndicators").carousel("prev");
-    });
-}
-
-/**
- * Querying from API
- */
-async function queryImage(data) {
-  const response = await fetch(
-    "https://xdwvg9no7pefghrn.us-east-1.aws.endpoints.huggingface.cloud",
-    {
-      headers: {
-        Accept: "image/png",
-        Authorization:
-          "Bearer VknySbLLTUjbxXAXCjyfaFIPwUTCeRXbFSOjwRiCxsxFyhbnGjSFalPKrpvvDAaPVzWEevPljilLVDBiTzfIbWFdxOkYJxnOPoHhkkVGzAknaOulWggusSFewzpqsNWM",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-    }
-  );
-
-  if (!response.ok) {
-    console.error(`Error: ${response.status} - ${response.statusText}`);
-    alert("Please retry. Found error while making API call.");
-    return null;
-  }
-
-  const imageBlob = await response.blob();
-  return imageBlob;
-}
-
-function addButtonsToCarousel() {
+function initButtonsInCarousel() {
   const carouselInner = document.querySelector(".carousel-inner");
   // Create the previous control
   const prevControl = document.createElement("a");
   prevControl.className = "carousel-control-prev";
-  prevControl.href = "#carouselExampleIndicators";
+  prevControl.href = "#carouselIndicators";
   prevControl.role = "button";
   prevControl.setAttribute("data-slide", "prev");
 
@@ -83,7 +93,7 @@ function addButtonsToCarousel() {
   // Create the next control
   const nextControl = document.createElement("a");
   nextControl.className = "carousel-control-next";
-  nextControl.href = "#carouselExampleIndicators";
+  nextControl.href = "#carouselIndicators";
   nextControl.role = "button";
   nextControl.setAttribute("data-slide", "next");
 
@@ -103,7 +113,60 @@ function addButtonsToCarousel() {
   carouselInner.appendChild(nextControl);
 }
 
-function reinitializeSlider() {
+/**
+ * Querying from API
+ */
+async function queryImage(data, timeout = 50000) {
+  // Create an AbortController
+  const controller = new AbortController();
+  const { signal } = controller;
+
+  // Set a timeout to abort the fetch after the specified time
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(
+      "https://xdwvg9no7pefghrn.us-east-1.aws.endpoints.huggingface.cloud",
+      {
+        headers: {
+          Accept: "image/png",
+          Authorization:
+            "Bearer VknySbLLTUjbxXAXCjyfaFIPwUTCeRXbFSOjwRiCxsxFyhbnGjSFalPKrpvvDAaPVzWEevPljilLVDBiTzfIbWFdxOkYJxnOPoHhkkVGzAknaOulWggusSFewzpqsNWM",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+        signal, // Attach the signal to the fetch request
+      }
+    );
+
+    // Clear the timeout since the fetch was successful
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      console.error(`Error: ${response.status} - ${response.statusText}`);
+      alert("Please retry. Found error while making API call.");
+      return null;
+    }
+
+    const imageBlob = await response.blob();
+    return imageBlob;
+  } catch (error) {
+    // Handle the aborted fetch or other errors
+    if (error.name === "AbortError") {
+      alert("Timeout, try again.");
+    } else {
+      console.error("Fetch error:", error);
+    }
+    return null;
+  }
+}
+
+/**
+ * Modify sliders
+ * on successful query output
+ */
+function modifySlider() {
   // Get the carousel inner container
   const carouselInner = document.querySelector(".carousel-inner");
 
@@ -118,7 +181,6 @@ function reinitializeSlider() {
 
     // Create an image element
     const imgElement = document.createElement("img");
-    console.log(imageBlob);
     imgElement.src = URL.createObjectURL(imageBlob);
     imgElement.alt = "Image";
     imgElement.className = "d-block w-100";
@@ -135,83 +197,31 @@ function reinitializeSlider() {
   firstItem.classList.add("active");
 
   // Add buttons to move in carousel
-  addButtonsToCarousel();
-
-  initializeSliderButtons();
+  initButtonsInCarousel();
 }
 
-async function appendImageToGlobalVariable(text) {
+/**
+ * Add image to global variable
+ * @param {String} text
+ */
+async function appendImage(text) {
   showLoadingIndicator();
 
   // Query image based on text
   const imageBlob = await queryImage({ inputs: text });
-  console.log(imageBlob);
   panelImages.push(imageBlob);
 
-  reinitializeSlider();
+  modifySlider();
   hideLoadingIndicator();
 }
 
 /**
- * Extract the data from the textarea
+ * Main
  */
-document
-  .getElementById("generate-image-btn")
-  .addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default behavior (navigation)
+function main() {
+  initEventListeners();
+  hideLoadingIndicator();
+  resizeCanvas();
+}
 
-    var textareaValue = document.getElementById("formControlTextarea1").value;
-
-    if (textareaValue.trim() == "") {
-      return;
-    }
-
-    if (panelImages.length == 10) {
-      alert("Limit for 10 images!!");
-      return;
-    }
-
-    appendImageToGlobalVariable(textareaValue.toString()).then(() => {
-      console.log(textareaValue.toString());
-    });
-  });
-
-/**
- * Add images to canvas area
- */
-document
-  .getElementById("add-image-btn")
-  .addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default behavior (navigation)
-    clearCanvas();
-    loadImages2(panelImages);
-  });
-
-/**
- * Add images to canvas area
- */
-document
-  .getElementById("download-comic-btn")
-  .addEventListener("click", function (event) {
-    // Get the canvas element
-    var canvas = document.getElementById("myCanvas");
-
-    // Create a new canvas with the desired width and height
-    var newCanvas = document.createElement("canvas");
-    newCanvas.width = 600; // Replace with your desired width
-    newCanvas.height = 900; // Replace with your desired height
-
-    // Copy the content of the original canvas to the new canvas
-    var context = newCanvas.getContext("2d");
-    context.drawImage(canvas, 0, 0, newCanvas.width, newCanvas.height);
-
-    // Convert the new canvas to a data URL
-    var dataUrl = newCanvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = "canvas_image.png";
-    link.click();
-  });
-
-hideLoadingIndicator();
-resizeCanvas();
+main();

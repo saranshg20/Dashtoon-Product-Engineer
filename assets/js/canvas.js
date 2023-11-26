@@ -2,22 +2,38 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 var images = [];
 
+
+/**
+ * Draw Images as per defined (x,y)
+ */
+function drawImages() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  images.forEach(({ img, x, y, width, height }) => {
+    ctx.drawImage(img, x, y, width, height);
+  });
+}
+
 function clearCanvas() {
   images.length = 0;
   activeImage = null;
   drawImages();
 }
 
-function loadImages2(blobList) {
-  blobList.forEach((blob, index) => {
+/**
+ * Directly render 5*2 format
+ * inside canvas
+ * @param {List} blobs 
+ */
+function loadImages2(blobs) {
+  blobs.forEach((blob, index) => {
     const img = new Image();
     img.onload = () => {
-      const row = Math.floor(index/2);
-      const column = index%2;
-      const x = column * canvas.width/2;
-      const y = row * canvas.height/5;
-      const width = canvas.width/2;
-      const height = canvas.height/5;
+      const row = Math.floor(index / 2);
+      const column = index % 2;
+      const x = (column * canvas.width) / 2;
+      const y = (row * canvas.height) / 5;
+      const width = canvas.width / 2;
+      const height = canvas.height / 5;
 
       images.push({
         img,
@@ -27,21 +43,19 @@ function loadImages2(blobList) {
         height,
       });
 
-      drawImages2();
+      drawImages();
     };
     img.src = URL.createObjectURL(blob);
   });
 }
 
-function drawImages2() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  images.forEach(({ img, x, y, width, height }) => {
-    ctx.drawImage(img, x, y, width, height);
-  });
-}
-
-function loadImages(blobList) {
-  blobList.forEach((blob, index) => {
+/**
+ * Drag and Resize Images
+ * inside canvas
+ * @param {List} blobs 
+ */
+function loadImages(blobs) {
+  blobs.forEach((blob, index) => {
     const img = new Image();
     img.onload = () => {
       images.push({
@@ -57,13 +71,10 @@ function loadImages(blobList) {
   });
 }
 
-function drawImages() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  images.forEach(({ img, x, y, width, height }) => {
-    ctx.drawImage(img, x, y, width, height);
-  });
-}
-
+/**
+ * Handling mouse events
+ * @param {Object} event 
+ */
 function handleMouseEvents(event) {
   const mouseX = event.clientX - canvas.getBoundingClientRect().left;
   const mouseY = event.clientY - canvas.getBoundingClientRect().top;
@@ -103,7 +114,7 @@ function handleMouseEvents(event) {
       if (isResizing) {
         images[activeImage].width = newMouseX - images[activeImage].x;
         images[activeImage].height = newMouseY - images[activeImage].y;
-      } 
+      }
       // else {
       //   images[activeImage].x = newMouseX;
       //   images[activeImage].y = newMouseY;
@@ -118,14 +129,16 @@ function handleMouseEvents(event) {
     isResizing = false;
     canvas.removeEventListener("mousemove", handleMouseEvents);
   });
+
+  canvas.addEventListener("mousedown", (event) => {
+    handleMouseEvents(event);
+  });
 }
 
-// Resize canvas according to window dimensions
+/**
+ * Resize canvas according to window dimensions
+ */
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-
-canvas.addEventListener("mousedown", (event) => {
-  handleMouseEvents(event);
-});
